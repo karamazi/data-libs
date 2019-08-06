@@ -22,7 +22,10 @@ class ConnectExasol:
     def connect(self):
         """ Attempt to connect to exasol."""
         schema = self.config.schema if ("schema" in self.config) else None
-        params = {"schema": schema, "compression": True}
+        params = {"compression": True}
+        if schema:
+            params["schema"] = schema
+
         params.update(self.config.params)
         try:
             self.connection = pyexasol.connect(

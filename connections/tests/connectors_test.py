@@ -66,6 +66,24 @@ def test_multi_server_postgres():
 
 
 @patch.dict("os.environ", TEST_EVIRONMENT)
+def test_empty_schema_exasol():
+    """ Test passing exasol multiple connections."""
+    with patch("pyexasol.connect") as mocked_conn:
+        with get("exasol_empty_schema") as conn:
+            pass
+
+    mocked_conn.assert_called_with(
+        compression=True,
+        dsn="127.0.0.1:5436",
+        fetch_dict=True,
+        password="IamAwizard",
+        user="test",
+        fetch_mapper=pyexasol.exasol_mapper,
+    )
+    conn.close.assert_called()
+
+
+@patch.dict("os.environ", TEST_EVIRONMENT)
 def test_multi_server_exasol():
     """ Test passing exasol multiple connections."""
     with patch("pyexasol.connect") as mocked_conn:
